@@ -51,10 +51,13 @@ def genPrime():
 # Naive primality check
 # True if prime
 def isPrimeBrute(n):
-    if n <= 1:
+    if n == 2:
+        return True
+    if n%2 == 0 or n <= 1:
         return False
-    for a in range(2,n-1):
-        if n%a == 0:
+    limit = int(math.sqrt(n))+1
+    for i in range(3,limit,2):
+        if n%i == 0:
             return False
     return True
 
@@ -83,18 +86,20 @@ def main():
     f.write(str(e)+","+str(d)+","+str(n))
     f.close()
     fin = open("rsaIn","r")
-    fout = open("rsaEnc","w")
+    foute = open("rsaEnc","w")
+    foutd = open("rsaDec","w")
+    i = 0
     for _ in fin.readlines():
-        tmp = pow(int(_),e,n)
-        fout.write(str(tmp)+"\n")
-        print("Encrypting %d as %d"%(int(_.strip()),tmp))
+        num = int(_.strip())
+        tmp = pow(num,e,n)
+        foute.write(str(tmp)+"\n")
         tmp2 = pow(tmp,d,n)
-        print("Decrypting %d as %d"%(tmp,tmp2))
-        i = 0
-        if int(_.strip()) == tmp2:
+        foutd.write(str(tmp2)+"\n")
+        if num == tmp2:
             i += 1
-    print(i)
-    fout.close()
+    print("Correct decyphering:",i)
+    foute.close()
+    foutd.close()
     fin.close()
 
 main()
