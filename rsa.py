@@ -44,7 +44,7 @@ def phi(n):
 # Generates prime numbers
 def genPrime():
     x = 1
-    while not isPrimeBrute(x):
+    while not isPrime(x):
         x = random.getrandbits(32)
     return x
 
