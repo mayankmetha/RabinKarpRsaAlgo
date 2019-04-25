@@ -5,14 +5,14 @@ import os
 import random
 import math
 
-#gcd
+# GCD
 def gcd(a,b):
     if b == 0:
         return a
     else:
         return gcd(b,a%b)
 
-#extended gcd
+# Extended GCD
 def extgcd(a,b):
     if b == 0:
         return (a,1,0)
@@ -21,13 +21,13 @@ def extgcd(a,b):
     d,x,y = d1,y1,(x1-(a//b)*y1)
     return (d,x,y)
 
-#multiplicative Inverse
+# Multiplicative Modulo Inverse
 def mulInv(a,n):
     d,x,y = extgcd(a,n)
     if d == 1:
         return int(x%n)
 
-#eulers totient for Prime numbers
+# Eulers totient for Prime numbers
 def phi(n):
     result = n
     p = 2
@@ -41,16 +41,16 @@ def phi(n):
         result = result*(1.0-(1.0/n))
     return int(result)
 
-# generates prime numbers
+# Generates prime numbers
 def genPrime():
     x = 1
     while not isPrimeBrute(x):
         x = random.getrandbits(32)
     return x
 
-# Naive primality check
+# Primality check
 # True if prime
-def isPrimeBrute(n):
+def isPrime(n):
     if n == 2:
         return True
     if n%2 == 0 or n <= 1:
@@ -68,7 +68,8 @@ def isRelPrime(a,b):
         return True
     else:
         return False
-    
+
+# Main 
 def main():
     p = genPrime()
     q = genPrime()
