@@ -4,6 +4,8 @@ import sys
 import os
 import random
 import math
+import time
+from termcolor import colored
 
 # GCD
 def gcd(a,b):
@@ -69,8 +71,8 @@ def isRelPrime(a,b):
     else:
         return False
 
-# Main 
-def main():
+# RSA 
+def rsa(inFile,outFile):
     p = genPrime()
     q = genPrime()
     n = p*q
@@ -81,25 +83,37 @@ def main():
         if isRelPrime(e,phiN):
             break
     d = mulInv(e,phiN)
-    print("Key1=(%d,%d)"%(e,n))
-    print("Key2=(%d,%d)"%(d,n))
-    f = open("rsaKeys","w")
-    f.write(str(e)+","+str(d)+","+str(n))
+    str1 = "("+str(e)+","+str(n)+")"
+    str2 = "("+str(d)+","+str(n)+")"
+    print(colored("Key 1 = ",'yellow',attrs=['bold']),colored(str1,'white',attrs=['bold']))
+    print(colored("Key 2 = ",'yellow',attrs=['bold']),colored(str2,'white',attrs=['bold']))
+    f = open(outFile+"Keys","w")
+    f.write(str(e)+","+str(n)+"\n"+str(d)+","+str(n))
     f.close()
-    fin = open("rsaIn","r")
-    foute = open("rsaEnc","w")
-    foutd = open("rsaDec","w")
+    fin = open(inFile,"r")
+    foute = open(outFile+"Encrypted","w")
+    foutd = open(outFile+"Decrypted","w")
     lines = 0
+    etime = 0
+    dtime = 0
     for _ in fin.readlines():
         lines += 1
         num = str(_.strip())
         arr = []
         arr2 = []
+        start = 0
+        stop = 0
+        start = time.time()
         for x in num:
             arr.append(str(pow(int(x),d,n)))
+        stop = time.time()
+        etime += (stop-start)
         foute.write((",".join(arr))+"\n")
+        start = time.time()
         for x in arr:
             arr2.append(str(pow(int(x),e,n)))
+        stop = time.time()
+        dtime += (stop-start)
         foutd.write(("".join(arr2))+"\n")
     foute.close()
     foutd.close()
@@ -107,16 +121,52 @@ def main():
     i = 0
     a1 = []
     a2 = []
-    f = open("rsaIn","r")
+    f = open(inFile,"r")
     for _ in f.readlines():
         a1.append(_.strip())
     f.close()
-    f = open("rsaDec","r")
+    f = open(outFile+"Decrypted","r")
     for _ in f.readlines():
         a2.append(_.strip())
     f.close()
     for _ in range(0,lines):
         if a1[_] == a2[_]:
             i += 1
-    print("Deciphered Correctly:%d out of %d"%(i,lines))
+    str3 = "Deciphered Correctly = "
+    str4 = "%d of %d"%(i,lines)
+    print(colored(str3,'yellow',attrs=['bold']),colored(str4,'white',attrs=['bold']))
+    str5 = "Encryption Time = "
+    str6 = str(etime*pow(10,6))+" µs"
+    str7 = "Decrpytion Time = "
+    str8 = str(dtime*pow(10,6))+" µs"
+    print(colored(str5,'green',attrs=['bold']),colored(str6,'white',attrs=['bold']))
+    print(colored(str7,'green',attrs=['bold']),colored(str8,'white',attrs=['bold']))
+
+def main():
+    inFile = None
+    outFile = None
+    if len(sys.argv) == 5:
+        if sys.argv[1] == '-i':
+            inFile = sys.argv[2]
+        elif sys.argv[3] == '-i':
+            inFile = sys.argv[4]
+        else:
+            print(colored("Usage Error: ./rsa.py -i <input file> -o <output file base name>",'magenta',attrs=['bold']))
+            exit(1)
+        if sys.argv[1] == '-o':
+            outFile = sys.argv[2]
+        elif sys.argv[3] == '-o':
+            outFile = sys.argv[4]
+        else:
+            print(colored("Usage Error: ./rsa.py -i <input file> -o <output file base name>",'magenta',attrs=['bold']))
+            exit(1)
+    else:
+        print(colored("Usage Error: ./rsa.py -i <input file> -o <output file base name>",'magenta',attrs=['bold']))
+        exit(1)
+    print(colored("Input File = ",'red',attrs=['bold']),colored(inFile,'white',attrs=['bold']))
+    print(colored("Keys File = ",'red',attrs=['bold']),colored(outFile+"Keys",'white',attrs=['bold']))
+    print(colored("Encryption File = ",'red',attrs=['bold']),colored(outFile+"Encrypted",'white',attrs=['bold']))
+    print(colored("Decryption File = ",'red',attrs=['bold']),colored(outFile+"Decrypted",'white',attrs=['bold']))
+    rsa(inFile,outFile)
+
 main()
