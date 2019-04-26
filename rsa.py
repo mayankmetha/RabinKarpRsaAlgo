@@ -45,7 +45,7 @@ def phi(n):
 def genPrime():
     x = 1
     while not isPrime(x):
-        x = random.getrandbits(32)
+        x = random.getrandbits(31)
     return x
 
 # Primality check
@@ -89,18 +89,34 @@ def main():
     fin = open("rsaIn","r")
     foute = open("rsaEnc","w")
     foutd = open("rsaDec","w")
-    i = 0
+    lines = 0
     for _ in fin.readlines():
-        num = int(_.strip())
-        tmp = pow(num,e,n)
-        foute.write(str(tmp)+"\n")
-        tmp2 = pow(tmp,d,n)
-        foutd.write(str(tmp2)+"\n")
-        if num == tmp2:
-            i += 1
-    print("Correct decyphering:",i)
+        lines += 1
+        num = str(_.strip())
+        arr = []
+        arr2 = []
+        for x in num:
+            arr.append(str(pow(int(x),d,n)))
+        foute.write((",".join(arr))+"\n")
+        for x in arr:
+            arr2.append(str(pow(int(x),e,n)))
+        foutd.write(("".join(arr2))+"\n")
     foute.close()
     foutd.close()
     fin.close()
-
+    i = 0
+    a1 = []
+    a2 = []
+    f = open("rsaIn","r")
+    for _ in f.readlines():
+        a1.append(_.strip())
+    f.close()
+    f = open("rsaDec","r")
+    for _ in f.readlines():
+        a2.append(_.strip())
+    f.close()
+    for _ in range(0,lines):
+        if a1[_] == a2[_]:
+            i += 1
+    print("Deciphered Correctly:%d out of %d"%(i,lines))
 main()
