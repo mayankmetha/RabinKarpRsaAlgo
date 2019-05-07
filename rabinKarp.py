@@ -55,17 +55,17 @@ def main():
         elif sys.argv[3] == '-t':
             inFile = sys.argv[4]
         else:
-            print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file base name>",'magenta',attrs=['bold']))
+            print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file",'magenta',attrs=['bold']))
             exit(1)
         if sys.argv[1] == '-o':
             outFile = sys.argv[2]
         elif sys.argv[3] == '-o':
             outFile = sys.argv[4]
         else:
-            print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file base name>",'magenta',attrs=['bold']))
+            print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file>",'magenta',attrs=['bold']))
             exit(1)
     else:
-        print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file base name>",'magenta',attrs=['bold']))
+        print(colored("Usage Error: ./rabinKarp.py -t <input file> -o <output file>",'magenta',attrs=['bold']))
         exit(1)
     print(colored("Key in pattern:",'yellow',attrs=['bold']))
     patt = getInput()
